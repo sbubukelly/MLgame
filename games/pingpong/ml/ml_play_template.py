@@ -37,28 +37,33 @@ class MLPlay:
             if y - self.old_y > 0 :
                 if x-self.old_x != 0:
                     self.m = (y - self.old_y)/(x - self.old_x)
-                    self.predict_x = math.floor((420-y+self.m*x)/self.m)
+                    self.predict_x = math.floor((415-y+self.m*x)/self.m)
                     if(self.predict_x >= 195):
-                        print("hit right wall")
-                        self.predict_y = math.floor((195-x)*self.m + y -5)      #撞牆壁時的y
-                        self.predict_x = (420-self.predict_y+(-self.m)*195)/(-self.m)
-                        print(self.predict_x)
-                    elif(self.predict_x <= 0):
-                        print("hit left wall")
-                        self.predict_y = math.floor((0-x)*self.m + y -5)      #撞牆壁時的y
-                        self.predict_x = (420-self.predict_y+(-self.m)*0)/(-self.m)
-                        print(self.predict_x)
+                        # print("hit right wall")
+                        self.predict_y = math.floor((195-x)*self.m + y )      #撞牆壁時的y
+                        self.predict_x = (415-self.predict_y+(-self.m)*195)/(-self.m)
+                        # print(self.predict_x)
+                    if(self.predict_x <= 0):
+                        # print("hit left wall")
+                        self.predict_y = math.floor((0-x)*self.m + y )      #撞牆壁時的y
+                        self.predict_x = (415-self.predict_y+(-self.m)*0)/(-self.m)
+                        # print(self.predict_x)
+                    
                     
                         #self.predict_x = (395-y+self.m*x)/self.m
                 
                     #print(self.predict_x,self.predict_y,x,y)
                 
-                    if(scene_info["platform_1P"][0] + 20 > self.predict_x):
-                        command = "MOVE_LEFT"
-                    elif(scene_info["platform_1P"][0] + 20 <= self.predict_x):
-                        command = "MOVE_RIGHT"
-                    else:
-                        command = "NONE"
+            if(scene_info["platform_1P"][0] + 20 > math.floor(self.predict_x)):
+                        if(scene_info["platform_1P"][0]+20-math.floor(self.predict_x)<5):
+                            command = "NONE"
+                        else:
+                            command = "MOVE_LEFT"
+            elif(scene_info["platform_1P"][0] + 20 < math.floor(self.predict_x)):
+                        if(math.floor(self.predict_x)-scene_info["platform_1P"][0]+20<5):
+                            command = "NONE"
+                        else:
+                            command = "MOVE_RIGHT"
             else:
                 command = "NONE"
             #print(scene_info)
